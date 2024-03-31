@@ -1,15 +1,13 @@
 package com.example.webbanhang.repo;
 
 import com.example.webbanhang.connect.HibernateUtils;
-import com.example.webbanhang.model.HoaDon;
+
 import com.example.webbanhang.model.HoaDonCT;
 import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.example.webbanhang.model.HoaDonCT;
-import com.example.webbanhang.connect.HibernateUtils;
-import org.hibernate.Session;
+
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
@@ -62,24 +60,28 @@ public class hdctRePo {
             session.close();
         }
     }
-    public void updateQuantityAndTotalPrice(int hdctId, int newQuantity) {
+    public void update(HoaDonCT hdct) {
         Session session = HibernateUtils.getFACTORY().openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            // Lấy chi tiết hóa đơn từ ID
-            HoaDonCT hoaDonCT = session.get(HoaDonCT.class, hdctId);
-            if (hoaDonCT != null) {
-                // Cập nhật số lượng mới
-                hoaDonCT.setSoLuongMua(newQuantity);
-                // Cập nhật tổng tiền bằng giá mới nhân với số lượng mới
-                hoaDonCT.setTongTien(hoaDonCT.getGiaBan() * newQuantity);
-                session.update(hoaDonCT);
-                transaction.commit();
-            } else {
-                // Xử lý trường hợp không tìm thấy chi tiết hóa đơn
-                System.out.println("Không tìm thấy chi tiết hóa đơn với ID: " + hdctId);
+            session.update(hdct);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
             }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }public void addcthd(HoaDonCT chiTietHoaDon) {
+        Session session = HibernateUtils.getFACTORY().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            session.save(chiTietHoaDon);
+            transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -89,6 +91,5 @@ public class hdctRePo {
             session.close();
         }
     }
-
 
 }

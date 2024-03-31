@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "XServlet", value = {"/home","/home/add","/home/thanhtoan","/home/hoadonct","/home/delete","/home/update","/home/updateQuantity"})
+@WebServlet(name = "XServlet", value = {"/home","/home/add","/home/thanhtoan","/home/hoadonct","/home/delete","/home/update","/home/updateQuantity","/home/addhdct"})
 public class XServlet extends HttpServlet {
     private CtspRespo res = new CtspRespo();
     private SizeRespon szres=new SizeRespon();
@@ -115,17 +115,42 @@ public class XServlet extends HttpServlet {
 
         else if (uri.contains("/home/updateQuantity")) {
             this.updateQuantity(request, response);
+        }else if(uri.contains("/home/addhdct")){
+            this.addhdct(request,response);
         }
     }
 
+    private void addhdct(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int productId = Integer.parseInt(request.getParameter("productId"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+        // Tạo một đối tượng HoaDonCT mới
+        HoaDonCT hdct = new HoaDonCT();
+        hdct.setChitietSp(res.getDetail(productId)); // Lấy thông tin chi tiết sản phẩm dựa trên ID sản phẩm
+        hdct.setSoLuongMua(quantity);
+
+        // Thêm đối tượng HoaDonCT vào cơ sở dữ liệu
+        hdctRepos.addcthd(hdct);
+
+        // Gửi phản hồi OK về client
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
     private void updateQuantity(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Lấy thông tin từ request
         int hdctId = Integer.parseInt(request.getParameter("hdctId"));
-        int newQuantity = Integer.parseInt(request.getParameter("newQuantity"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-        // Gọi phương thức để cập nhật số lượng và tổng tiền của chi tiết hóa đơn
-        hdctRepos.updateQuantityAndTotalPrice(hdctId, newQuantity);
+        // Gọi phương thức để cập nhật số lượng sản phẩm
+        hdctRePo hdctRepo = new hdctRePo();
+        HoaDonCT hdct = hdctRepo.getDetail(hdctId);
+        if (hdct != null) {
+            hdct.setSoLuongMua(quantity);
+            hdct.setTongTien(quantity * hdct.getGiaBan()); // Cập nhật lại tổng tiền
 
-        // Chuyển hướng người dùng đến trang chính sau khi cập nhật thành công
+            // Lưu thông tin cập nhật vào cơ sở dữ liệu
+            hdctRepo.update(hdct);
+        }
         response.sendRedirect(request.getContextPath() + "/home");
     }
 

@@ -92,65 +92,69 @@
             </tr>
             </thead>
             <tbody>
-<c:forEach items="${hdct}" var="hdcts" varStatus="i">
+            <c:forEach items="${hdct}" var="hdcts" varStatus="i">
+                <tr>
+                    <td>${i.index + 1}</td>
+                    <td>${hdcts.id}</td>
+                    <td>${hdcts.tenSanPham}</td>
+                    <td>${hdcts.soLuongMua}</td>
+                    <td>${hdcts.giaBan}</td>
+                    <td>${hdcts.tongTien}</td>
+                    <td>
+                        <button class="btn btn-primary updateBtn" data-id="${hdcts.id}">Cập nhật</button>
+                        <div class="updateForm" style="display: none;">
+                            <input type="number" class="form-control quantityInput" value="${hdcts.soLuongMua}" min="1">
+                            <button class="btn btn-success confirmUpdate">Xác nhận</button>
+                        </div>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" href="/home/delete?id=${hdcts.id}">Xóa</a>
+                    </td>
+                </tr>
+            </c:forEach>
 
-        <tr>
-            <td>${i.index + 1}</td>
-            <td>${hdcts.id}</td>
-            <td>${hdcts.tenSanPham}</td>
-            <td>${hdcts.soLuongMua}</td>
-            <td>${hdcts.giaBan}</td>
-            <td>${hdcts.tongTien}</td>
-            <td>
-                <!-- Button to toggle input field -->
-                <button class="btn btn-warning update-btn">Cập nhật</button>
-                <!-- Input field for quantity -->
-                <form class="quantity-form" action="/home/updateQuantity" method="post" style="display: none;">
-                    <div class="input-group">
-                        <input type="number" class="form-control" value="${hdcts.soLuongMua}" name="newQuantity">
-                        <input type="hidden" name="hdctId" value="${hdcts.id}">
-                        <button type="submit" class="btn btn-primary">Xác nhận</button>
-                    </div>
-                </form>
-            </td>
-        </tr>
 
-</c:forEach>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    var updateBtns = document.querySelectorAll(".updateBtn");
+                    updateBtns.forEach(function(btn) {
+                        btn.addEventListener("click", function() {
+                            var id = this.getAttribute("data-id");
+                            var updateForm = document.querySelector(".updateForm[data-id='" + id + "']");
+                            updateForm.style.display = "block";
+                        });
+                    });
+
+                    var confirmBtns = document.querySelectorAll(".confirmUpdate");
+                    confirmBtns.forEach(function(btn) {
+                        btn.addEventListener("click", function() {
+                            var id = this.getAttribute("data-id");
+                            var quantityInput = document.querySelector(".quantityInput[data-id='" + id + "']");
+                            var newQuantity = quantityInput.value;
+                            updateQuantity(id, newQuantity);
+                        });
+                    });
+
+                    function updateQuantity(id, newQuantity) {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "/home/updateQuantity", true);
+                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                window.location.reload();
+                            }
+                        };
+                        xhr.send("hdctId=" + id + "&newQuantity=" + newQuantity);
+                    }
+                });
+            </script>
+
+
             </tbody>
         </table>
     </div>
-    <script>
-        // JavaScript to toggle input field
-        document.querySelectorAll('.update-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                const row = button.parentNode.parentNode;
-                const inputField = row.querySelector('.input-group');
-                inputField.style.display = inputField.style.display === 'none' ? 'block' : 'none';
-            });
-        });
 
-        // JavaScript to handle update button click
-        document.querySelectorAll('.confirm-update').forEach(button => {
-            button.addEventListener('click', () => {
-                const row = button.parentNode.parentNode.parentNode;
-                const quantity = row.querySelector('.quantity-input').value;
-                const hdctId = row.querySelector('td:nth-child(2)').innerText;
-                // Send AJAX request to update quantity
-                fetch(`/home/updateQuantity?hdctId=${hdctId}&newQuantity=${quantity}`, { method: 'POST' })
-                    .then(response => {
-                        if (response.ok) {
-                            // Reload page after successful update
-                            location.reload();
-                        } else {
-                            console.error('Failed to update quantity');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            });
-        });
-    </script>
     <div class="col-5">
         <h2>Tạo hoá đơn</h2>
         <form action="/home/add" method="post">
@@ -186,19 +190,52 @@
     </div>
 </div>
 <div>
-    <h2>Danh sách chi tiếtsản phẩm</h2>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var buyButtons = document.querySelectorAll(".buyBtn");
+            buyButtons.forEach(function(btn) {
+                btn.addEventListener("click", function() {
+                    var productId = this.getAttribute("data-product-id");
+                    var productName = this.getAttribute("data-product-name");
+                    showQuantityInput(productId, productName);
+                });
+            });
+
+            function showQuantityInput(productId, productName) {
+                var quantity = prompt("Nhập số lượng cho sản phẩm " + productName + ":");
+                if (quantity !== null && quantity !== "") {
+                    addToCart(productId, quantity);
+                }
+            }
+
+            function addToCart(productId, quantity) {
+                // Gửi yêu cầu POST để thêm sản phẩm vào giỏ hàng
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/home/addhdct", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        // Xử lý phản hồi từ máy chủ (nếu cần)
+                        window.location.reload(); // Làm mới trang sau khi thêm vào giỏ hàng
+                    }
+                };
+                xhr.send("productId=" + productId + "&quantity=" + quantity);
+            }
+        });
+    </script>
+
     <table class="table">
         <thead>
         <tr>
-            <td>STT</td>
-            <td>ID CTSP</td>
-            <td>Ten san pham</td>
-            <td>Mau sac</td>
-            <td>Size</td>
-            <td>Gia ban</td>
-            <td>So luong ton</td>
-            <td>Trang Thai</td>
-            <td>Chuc nang</td>
+            <th>STT</th>
+            <th>ID</th>
+            <th>Tên sản phẩm</th>
+            <th>Màu sắc</th>
+            <th>Size</th>
+            <th>Giá bán</th>
+            <th>Số lượng tồn</th>
+            <th>Trạng thái</th>
+            <th>Chức năng</th>
         </tr>
         </thead>
         <tbody>
@@ -212,12 +249,18 @@
                 <td>${ct.giaBan}</td>
                 <td>${ct.soLg}</td>
                 <td>${ct.trangThai}</td>
-                <td><button class="btn btn-primary">Chọn mua</button></td>
+                <td>
+                    <button class="btn btn-primary buyBtn"
+                            data-product-id="${ct.id}"
+                            data-product-name="${ct.sp.tenSanpham}">
+                        Chọn mua
+                    </button>
+                </td>
             </tr>
         </c:forEach>
-
         </tbody>
     </table>
+
 </div>
 </body>
 </html>
