@@ -55,4 +55,25 @@ public class CtspRespo {
             session.close();
         }
     }
+    public void update(ChitietSp ctsp) {
+        Session sess = null;
+        Transaction tr = null;
+        try {
+            sess = HibernateUtils.getFACTORY().openSession();
+            tr = sess.beginTransaction();
+
+            sess.saveOrUpdate(ctsp); // Sử dụng saveOrUpdate để thêm mới hoặc cập nhật đối tượng
+
+            tr.commit();
+        } catch (Exception e) {
+            if (tr != null) {
+                tr.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (sess != null && sess.isOpen()) {
+                sess.close();
+            }
+        }
+    }
 }

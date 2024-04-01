@@ -3,6 +3,7 @@ package com.example.webbanhang.repo;
 import com.example.webbanhang.connect.HibernateUtils;
 import com.example.webbanhang.model.KhachHang;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,18 +31,24 @@ public class KhachHangRepo {
         }
     }
 
-    public List<KhachHang> findByPhoneNumber(String phoneNumber) {
+    public KhachHang findByPhoneNumber(String phoneNumber) {
         Session session = null;
         try {
             session = HibernateUtils.getFACTORY().openSession();
-            // Sử dụng câu truy vấn HQL để tìm kiếm khách hàng với số điện thoại cụ thể
-            return session.createQuery("FROM KhachHang WHERE sdt = :phoneNumber", KhachHang.class)
-                    .setParameter("phoneNumber", phoneNumber)
-                    .getResultList();
+            String hql = "FROM KhachHang WHERE sdt = :phoneNumber";
+            Query<KhachHang> query = session.createQuery(hql);
+            query.setParameter("phoneNumber", phoneNumber);
+            List<KhachHang> results = query.list();
+            if (!results.isEmpty()) {
+                return results.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (session != null) {
                 session.close();
             }
         }
+        return null;
     }
 }

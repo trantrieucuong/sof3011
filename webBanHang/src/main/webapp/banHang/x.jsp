@@ -84,121 +84,178 @@
             <tr>
                 <td>STT</td>
                 <td>ID</td>
-                <td>Ten san pham</td>
-                <td>So luong</td>
-                <td>Gia ban</td>
-                <td>Tong tien</td>
-                <td>Chuc nang</td>
+                <td>Tên sản phẩm</td>
+                <td>Số lượng</td>
+                <td>Giá bán</td>
+                <td>Tổng tiền</td>
+                <td>Chức năng</td>
             </tr>
             </thead>
             <tbody>
-<c:forEach items="${hdct}" var="hdcts" varStatus="i">
+            <c:forEach items="${hdct}" var="hdcts" varStatus="i">
+                <tr>
+                    <td>${i.index + 1}</td>
+                    <td>${hdcts.id}</td>
+                    <td>${hdcts.tenSanPham}</td>
+                    <td>${hdcts.soLuongMua}</td>
+                    <td>${hdcts.giaBan}</td>
+                    <td>${hdcts.tongTien}</td>
+                    <td>
+                        <button class="btn btn-primary updateBtn" data-id="${hdcts.id}">Cập nhật</button>
+                        <div class="updateForm" style="display: none;">
+                            <input type="number" class="form-control quantityInput" value="${hdcts.soLuongMua}" min="1">
+                            <button class="btn btn-success confirmUpdate">Xác nhận</button>
+                        </div>
+                        <a class="btn btn-danger" href="/delete?id=${hdcts.id}">Xóa</a>
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
 
-        <tr>
-            <td>${i.index + 1}</td>
-            <td>${hdcts.id}</td>
-            <td>${hdcts.tenSanPham}</td>
-            <td>${hdcts.soLuongMua}</td>
-            <td>${hdcts.giaBan}</td>
-            <td>${hdcts.tongTien}</td>
-            <td>
-                <!-- Button to toggle input field -->
-                <button class="btn btn-warning update-btn">Cập nhật</button>
-                <!-- Input field for quantity -->
-                <form class="quantity-form" action="/home/updateQuantity" method="post" style="display: none;">
-                    <div class="input-group">
-                        <input type="number" class="form-control" value="${hdcts.soLuongMua}" name="newQuantity">
-                        <input type="hidden" name="hdctId" value="${hdcts.id}">
-                        <button type="submit" class="btn btn-primary">Xác nhận</button>
-                    </div>
-                </form>
-            </td>
-        </tr>
+        <script>
+            // Xử lý sự kiện khi nhấp vào nút Cập nhật
+            var updateButtons = document.querySelectorAll('.updateBtn');
+            updateButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var updateForm = this.nextElementSibling;
+                    updateForm.style.display = 'block';
+                });
+            });
 
-</c:forEach>
+            // Xử lý sự kiện khi xác nhận cập nhật
+            var confirmButtons = document.querySelectorAll('.confirmUpdate');
+            confirmButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var quantityInput = this.previousElementSibling;
+                    var newQuantity = quantityInput.value;
+                    var hdctId = this.closest('tr').querySelector('td:nth-child(2)').innerText; // Lấy ID từ cột thứ 2 trong hàng
+                    // Gửi yêu cầu cập nhật đến máy chủ
+                    fetch('/home/updateQuantity', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'id=' + hdctId + '&quantity=' + newQuantity
+                    }).then(function(response) {
+                        if (response.redirected) {
+                            window.location.href = response.url; // Sau khi cập nhật thành công, chuyển hướng lại trang chính
+                        }
+                    }).catch(function(error) {
+                        console.error('Error:', error);
+                    });
+                });
+            });
+        </script>
+
+
+
+
             </tbody>
         </table>
     </div>
-    <script>
-        // JavaScript to toggle input field
-        document.querySelectorAll('.update-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                const row = button.parentNode.parentNode;
-                const inputField = row.querySelector('.input-group');
-                inputField.style.display = inputField.style.display === 'none' ? 'block' : 'none';
-            });
-        });
 
-        // JavaScript to handle update button click
-        document.querySelectorAll('.confirm-update').forEach(button => {
-            button.addEventListener('click', () => {
-                const row = button.parentNode.parentNode.parentNode;
-                const quantity = row.querySelector('.quantity-input').value;
-                const hdctId = row.querySelector('td:nth-child(2)').innerText;
-                // Send AJAX request to update quantity
-                fetch(`/home/updateQuantity?hdctId=${hdctId}&newQuantity=${quantity}`, { method: 'POST' })
-                    .then(response => {
-                        if (response.ok) {
-                            // Reload page after successful update
-                            location.reload();
-                        } else {
-                            console.error('Failed to update quantity');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            });
-        });
-    </script>
     <div class="col-5">
         <h2>Tạo hoá đơn</h2>
-        <form action="/home/add" method="post">
-        <div class="row">
-            <div>
+        <form id="invoiceForm" action="/home/createInvoice" method="post">
+            <div class="row">
                 <div class="mb-3">
-                    <label class="col-3">Số điện thoại</label>
-                    <input type="text" class="col-7" id="phone_number">
+                    <label for="phone_number" class="col-3">Số điện thoại</label>
+                    <input type="text" id="phone_number" name="phone_number" class="col-7">
                 </div>
-                <button class="btn btn-primary" onclick="searchCustomer()">Search</button>
+                <button type="button" class="btn btn-primary" onclick="searchCustomer()">Tìm kiếm</button>
             </div>
             <div class="mb-3">
-                <label class="col-3">Tên Khách hàng</label>
-
-                <input type="text" class="col-7" id="customer_name"  value="${lop.id}" name="id_khach_hang" >
-
+                <label for="customer_id" class="col-3">ID Khách hàng</label>
+                <input type="text" id="customer_id" name="customer_id" class="col-7" readonly>
             </div>
             <div class="mb-3">
-                <label class="col-3">ID Hoá đơn</label>
-                <input type="text" class="col-7" id="bill_id" readonly>
+                <label for="customer_name" class="col-3">Tên Khách hàng</label>
+                <input type="text" id="customer_name" name="customer_name" class="col-7" readonly>
             </div>
             <div class="mb-3">
-                <label class="col-3">Tổng tiền</label>
-                <input type="text" class="col-7" id="total_amount" readonly>
+                <label for="bill_id" class="col-3">ID Hoá đơn</label>
+                <input type="text" id="bill_id" name="bill_id" class="col-7" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="total_amount" class="col-3">Tổng tiền</label>
+                <input type="text" id="total_amount" name="total_amount" class="col-7" readonly>
             </div>
             <div>
-                <button class="btn btn-primary" type="submit">Tạo hoá đơn</button>
-                <button class="btn btn-primary">Thanh toán</button>
+                <button type="submit" class="btn btn-primary">Tạo hoá đơn</button>
+                <button type="button" class="btn btn-primary">Thanh toán</button>
             </div>
-        </div>
         </form>
 
+        <script>
+            function searchCustomer() {
+                var phoneNumber = document.getElementById('phone_number').value; // Lấy số điện thoại
+
+                // Gửi yêu cầu tìm kiếm khách hàng đến servlet
+                fetch('/home/searchCustomer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'phone_number=' + phoneNumber
+                }).then(function(response) {
+                    return response.json();
+                }).then(function(data) {
+                    console.log('Customer data:', data);
+                    if (data) {
+                        // Nếu có dữ liệu khách hàng, cập nhật trường nhập liệu "ID Khách hàng" và "Tên Khách hàng"
+                        document.getElementById('customer_id').value = data.id;
+                        document.getElementById('customer_name').value = data.hoTen;
+                    } else {
+                        // Nếu không có dữ liệu khách hàng, hiển thị thông báo không tìm thấy
+                        alert("Không tìm thấy khách hàng");
+                    }
+                }).catch(function(error) {
+                    console.error('Error:', error);
+                });
+            }
+
+            function createInvoice() {
+                var customerId = document.getElementById('customer_id').value; // Lấy ID khách hàng
+                var phoneNumber = document.getElementById('phone_number').value; // Lấy số điện thoại
+
+                // Gửi yêu cầu tạo hoá đơn đến servlet
+                fetch('/home/createInvoice', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'customer_id=' + customerId + '&phone_number=' + phoneNumber
+                }).then(function(response) {
+                    if (response.ok) {
+                        // Nếu tạo hoá đơn thành công, hiển thị cửa sổ cảnh báo
+                        alert("Hoá đơn đã được tạo thành công!");
+                    } else {
+                        // Nếu có lỗi khi tạo hoá đơn, hiển thị cửa sổ cảnh báo
+                        alert("Có lỗi xảy ra khi tạo hoá đơn!");
+                    }
+                }).catch(function(error) {
+                    console.error('Error:', error);
+                });
+            }
+        </script>
     </div>
 </div>
 <div>
-    <h2>Danh sách chi tiếtsản phẩm</h2>
+
+
     <table class="table">
         <thead>
         <tr>
-            <td>STT</td>
-            <td>ID CTSP</td>
-            <td>Ten san pham</td>
-            <td>Mau sac</td>
-            <td>Size</td>
-            <td>Gia ban</td>
-            <td>So luong ton</td>
-            <td>Trang Thai</td>
-            <td>Chuc nang</td>
+            <th>STT</th>
+            <th>ID</th>
+            <th>Tên sản phẩm</th>
+            <th>Màu sắc</th>
+            <th>Size</th>
+            <th>Giá bán</th>
+            <th>Số lượng tồn</th>
+            <th>Trạng thái</th>
+            <th>Chức năng</th>
         </tr>
         </thead>
         <tbody>
@@ -212,12 +269,55 @@
                 <td>${ct.giaBan}</td>
                 <td>${ct.soLg}</td>
                 <td>${ct.trangThai}</td>
-                <td><button class="btn btn-primary">Chọn mua</button></td>
+                <td>
+                    <button class="btn btn-primary addToCartBtn"
+                            data-product-id="${ct.id}"
+                            data-gia-ban="${ct.giaBan}">Chọn mua</button>
+                </td>
             </tr>
         </c:forEach>
 
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var addToCartBtns = document.querySelectorAll(".addToCartBtn");
+                addToCartBtns.forEach(function(btn) {
+                    btn.addEventListener("click", function() {
+                        var productId = this.getAttribute("data-product-id");
+                        var giaBan = this.getAttribute("data-gia-ban");
+                        var quantity = prompt("Nhập số lượng:", "1");
+
+                        if (quantity !== null && quantity.trim() !== "") {
+                            // Gửi yêu cầu AJAX để thêm sản phẩm vào giỏ hàng
+                            addToCart(productId, giaBan, quantity);
+                        } else {
+                            alert("Số lượng không hợp lệ!");
+                        }
+                    });
+                });
+
+                function addToCart(productId, giaBan, quantity) {
+                    // Gửi yêu cầu AJAX để thêm sản phẩm vào giỏ hàng
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "/home/addToCart", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200) {
+                                alert("Sản phẩm đã được thêm vào giỏ hàng!");
+                                window.location.reload(); // Làm mới trang sau khi thêm vào giỏ hàng
+                            } else {
+                                alert("Đã xảy ra lỗi khi thêm vào giỏ hàng!");
+                            }
+                        }
+                    };
+                    xhr.send("productId=" + productId + "&giaBan=" + giaBan + "&quantity=" + quantity);
+                }
+            });
+        </script>
+
         </tbody>
     </table>
+
 </div>
 </body>
 </html>
