@@ -84,11 +84,11 @@
             <tr>
                 <td>STT</td>
                 <td>ID</td>
-                <td>Ten san pham</td>
-                <td>So luong</td>
-                <td>Gia ban</td>
-                <td>Tong tien</td>
-                <td>Chuc nang</td>
+                <td>Tên sản phẩm</td>
+                <td>Số lượng</td>
+                <td>Giá bán</td>
+                <td>Tổng tiền</td>
+                <td>Chức năng</td>
             </tr>
             </thead>
             <tbody>
@@ -106,49 +106,49 @@
                             <input type="number" class="form-control quantityInput" value="${hdcts.soLuongMua}" min="1">
                             <button class="btn btn-success confirmUpdate">Xác nhận</button>
                         </div>
-                    </td>
-                    <td>
-                        <a class="btn btn-danger" href="/home/delete?id=${hdcts.id}">Xóa</a>
+                        <a class="btn btn-danger" href="/delete?id=${hdcts.id}">Xóa</a>
                     </td>
                 </tr>
             </c:forEach>
+            </tbody>
+        </table>
 
-
-
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    var updateBtns = document.querySelectorAll(".updateBtn");
-                    updateBtns.forEach(function(btn) {
-                        btn.addEventListener("click", function() {
-                            var id = this.getAttribute("data-id");
-                            var updateForm = document.querySelector(".updateForm[data-id='" + id + "']");
-                            updateForm.style.display = "block";
-                        });
-                    });
-
-                    var confirmBtns = document.querySelectorAll(".confirmUpdate");
-                    confirmBtns.forEach(function(btn) {
-                        btn.addEventListener("click", function() {
-                            var id = this.getAttribute("data-id");
-                            var quantityInput = document.querySelector(".quantityInput[data-id='" + id + "']");
-                            var newQuantity = quantityInput.value;
-                            updateQuantity(id, newQuantity);
-                        });
-                    });
-
-                    function updateQuantity(id, newQuantity) {
-                        var xhr = new XMLHttpRequest();
-                        xhr.open("POST", "/home/updateQuantity", true);
-                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                        xhr.onreadystatechange = function() {
-                            if (xhr.readyState === 4 && xhr.status === 200) {
-                                window.location.reload();
-                            }
-                        };
-                        xhr.send("hdctId=" + id + "&newQuantity=" + newQuantity);
-                    }
+        <script>
+            // Xử lý sự kiện khi nhấp vào nút Cập nhật
+            var updateButtons = document.querySelectorAll('.updateBtn');
+            updateButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var updateForm = this.nextElementSibling;
+                    updateForm.style.display = 'block';
                 });
-            </script>
+            });
+
+            // Xử lý sự kiện khi xác nhận cập nhật
+            var confirmButtons = document.querySelectorAll('.confirmUpdate');
+            confirmButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var quantityInput = this.previousElementSibling;
+                    var newQuantity = quantityInput.value;
+                    var hdctId = this.closest('tr').querySelector('td:nth-child(2)').innerText; // Lấy ID từ cột thứ 2 trong hàng
+                    // Gửi yêu cầu cập nhật đến máy chủ
+                    fetch('/home/updateQuantity', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'id=' + hdctId + '&quantity=' + newQuantity
+                    }).then(function(response) {
+                        if (response.redirected) {
+                            window.location.href = response.url; // Sau khi cập nhật thành công, chuyển hướng lại trang chính
+                        }
+                    }).catch(function(error) {
+                        console.error('Error:', error);
+                    });
+                });
+            });
+        </script>
+
+
 
 
             </tbody>
@@ -157,72 +157,92 @@
 
     <div class="col-5">
         <h2>Tạo hoá đơn</h2>
-        <form action="/home/add" method="post">
-        <div class="row">
-            <div>
+        <form id="invoiceForm" action="/home/createInvoice" method="post">
+            <div class="row">
                 <div class="mb-3">
-                    <label class="col-3">Số điện thoại</label>
-                    <input type="text" class="col-7" id="phone_number">
+                    <label for="phone_number" class="col-3">Số điện thoại</label>
+                    <input type="text" id="phone_number" name="phone_number" class="col-7">
                 </div>
-                <button class="btn btn-primary" onclick="searchCustomer()">Search</button>
+                <button type="button" class="btn btn-primary" onclick="searchCustomer()">Tìm kiếm</button>
             </div>
             <div class="mb-3">
-                <label class="col-3">Tên Khách hàng</label>
-
-                <input type="text" class="col-7" id="customer_name"  value="${lop.id}" name="id_khach_hang" >
-
+                <label for="customer_id" class="col-3">ID Khách hàng</label>
+                <input type="text" id="customer_id" name="customer_id" class="col-7" readonly>
             </div>
             <div class="mb-3">
-                <label class="col-3">ID Hoá đơn</label>
-                <input type="text" class="col-7" id="bill_id" readonly>
+                <label for="customer_name" class="col-3">Tên Khách hàng</label>
+                <input type="text" id="customer_name" name="customer_name" class="col-7" readonly>
             </div>
             <div class="mb-3">
-                <label class="col-3">Tổng tiền</label>
-                <input type="text" class="col-7" id="total_amount" readonly>
+                <label for="bill_id" class="col-3">ID Hoá đơn</label>
+                <input type="text" id="bill_id" name="bill_id" class="col-7" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="total_amount" class="col-3">Tổng tiền</label>
+                <input type="text" id="total_amount" name="total_amount" class="col-7" readonly>
             </div>
             <div>
-                <button class="btn btn-primary" type="submit">Tạo hoá đơn</button>
-                <button class="btn btn-primary">Thanh toán</button>
+                <button type="submit" class="btn btn-primary">Tạo hoá đơn</button>
+                <button type="button" class="btn btn-primary">Thanh toán</button>
             </div>
-        </div>
         </form>
 
+        <script>
+            function searchCustomer() {
+                var phoneNumber = document.getElementById('phone_number').value; // Lấy số điện thoại
+
+                // Gửi yêu cầu tìm kiếm khách hàng đến servlet
+                fetch('/home/searchCustomer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'phone_number=' + phoneNumber
+                }).then(function(response) {
+                    return response.json();
+                }).then(function(data) {
+                    console.log('Customer data:', data);
+                    if (data) {
+                        // Nếu có dữ liệu khách hàng, cập nhật trường nhập liệu "ID Khách hàng" và "Tên Khách hàng"
+                        document.getElementById('customer_id').value = data.id;
+                        document.getElementById('customer_name').value = data.hoTen;
+                    } else {
+                        // Nếu không có dữ liệu khách hàng, hiển thị thông báo không tìm thấy
+                        alert("Không tìm thấy khách hàng");
+                    }
+                }).catch(function(error) {
+                    console.error('Error:', error);
+                });
+            }
+
+            function createInvoice() {
+                var customerId = document.getElementById('customer_id').value; // Lấy ID khách hàng
+                var phoneNumber = document.getElementById('phone_number').value; // Lấy số điện thoại
+
+                // Gửi yêu cầu tạo hoá đơn đến servlet
+                fetch('/home/createInvoice', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'customer_id=' + customerId + '&phone_number=' + phoneNumber
+                }).then(function(response) {
+                    if (response.ok) {
+                        // Nếu tạo hoá đơn thành công, hiển thị cửa sổ cảnh báo
+                        alert("Hoá đơn đã được tạo thành công!");
+                    } else {
+                        // Nếu có lỗi khi tạo hoá đơn, hiển thị cửa sổ cảnh báo
+                        alert("Có lỗi xảy ra khi tạo hoá đơn!");
+                    }
+                }).catch(function(error) {
+                    console.error('Error:', error);
+                });
+            }
+        </script>
     </div>
 </div>
 <div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var buyButtons = document.querySelectorAll(".buyBtn");
-            buyButtons.forEach(function(btn) {
-                btn.addEventListener("click", function() {
-                    var productId = this.getAttribute("data-product-id");
-                    var productName = this.getAttribute("data-product-name");
-                    showQuantityInput(productId, productName);
-                });
-            });
 
-            function showQuantityInput(productId, productName) {
-                var quantity = prompt("Nhập số lượng cho sản phẩm " + productName + ":");
-                if (quantity !== null && quantity !== "") {
-                    addToCart(productId, quantity);
-                }
-            }
-
-            function addToCart(productId, quantity) {
-                // Gửi yêu cầu POST để thêm sản phẩm vào giỏ hàng
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "/home/addhdct", true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        // Xử lý phản hồi từ máy chủ (nếu cần)
-                        window.location.reload(); // Làm mới trang sau khi thêm vào giỏ hàng
-                    }
-                };
-                xhr.send("productId=" + productId + "&quantity=" + quantity);
-            }
-        });
-    </script>
 
     <table class="table">
         <thead>
@@ -250,14 +270,51 @@
                 <td>${ct.soLg}</td>
                 <td>${ct.trangThai}</td>
                 <td>
-                    <button class="btn btn-primary buyBtn"
+                    <button class="btn btn-primary addToCartBtn"
                             data-product-id="${ct.id}"
-                            data-product-name="${ct.sp.tenSanpham}">
-                        Chọn mua
-                    </button>
+                            data-gia-ban="${ct.giaBan}">Chọn mua</button>
                 </td>
             </tr>
         </c:forEach>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var addToCartBtns = document.querySelectorAll(".addToCartBtn");
+                addToCartBtns.forEach(function(btn) {
+                    btn.addEventListener("click", function() {
+                        var productId = this.getAttribute("data-product-id");
+                        var giaBan = this.getAttribute("data-gia-ban");
+                        var quantity = prompt("Nhập số lượng:", "1");
+
+                        if (quantity !== null && quantity.trim() !== "") {
+                            // Gửi yêu cầu AJAX để thêm sản phẩm vào giỏ hàng
+                            addToCart(productId, giaBan, quantity);
+                        } else {
+                            alert("Số lượng không hợp lệ!");
+                        }
+                    });
+                });
+
+                function addToCart(productId, giaBan, quantity) {
+                    // Gửi yêu cầu AJAX để thêm sản phẩm vào giỏ hàng
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "/home/addToCart", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200) {
+                                alert("Sản phẩm đã được thêm vào giỏ hàng!");
+                                window.location.reload(); // Làm mới trang sau khi thêm vào giỏ hàng
+                            } else {
+                                alert("Đã xảy ra lỗi khi thêm vào giỏ hàng!");
+                            }
+                        }
+                    };
+                    xhr.send("productId=" + productId + "&giaBan=" + giaBan + "&quantity=" + quantity);
+                }
+            });
+        </script>
+
         </tbody>
     </table>
 
