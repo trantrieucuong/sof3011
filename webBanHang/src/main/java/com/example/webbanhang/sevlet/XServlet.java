@@ -143,14 +143,20 @@ public class XServlet extends HttpServlet {
         // Tạo một đối tượng HoaDonCT mới
         HoaDonCT hdct = new HoaDonCT();
 
-        // Đặt ID của hóa đơn mặc định là 1
+
         HoaDon hoaDon = new HoaDon();
-        hoaDon.setId(1);
+        hoaDon.setId(productId);
         hdct.setHoaDon(hoaDon);
 
         // Lấy thông tin chi tiết sản phẩm dựa trên ID sản phẩm
         ChitietSp chitietSp = res.getDetail(productId);
         hdct.setChitietSp(chitietSp);
+        hdct.setGiaBan(giaBan);
+        hdct.setTrangThai("active");
+        hdct.setNgayTao(new Date());
+        hdct.setNgaySua(new Date());
+
+
 
         // Đặt số lượng mua
         hdct.setSoLuongMua(quantity);

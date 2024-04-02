@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 
 @Setter
 @AllArgsConstructor
@@ -62,11 +64,11 @@ public class HoaDonCT {
         return trangThai;
     }
 
-    public String getNgayTao() {
+    public Date getNgayTao() {
         return ngayTao;
     }
 
-    public String getNgaySua() {
+    public Date getNgaySua() {
         return ngaySua;
     }
 
@@ -79,9 +81,9 @@ public class HoaDonCT {
     @Column(name = "trang_thai")
     private String trangThai;
     @Column(name = "ngay_tao")
-    private String ngayTao;
+    private Date ngayTao;
     @Column(name = "ngay_sua")
-    private String ngaySua;
+    private Date ngaySua;
 
 
 
