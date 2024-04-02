@@ -93,8 +93,32 @@ public class CtspServlet extends HttpServlet {
         }
     }
 
-    private void update(HttpServletRequest request, HttpServletResponse response) {
+    private void update(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String ma = request.getParameter("ma");
+        Float gia = Float.parseFloat(request.getParameter("gia"));
+        Integer slg = Integer.parseInt(request.getParameter("slg"));
+        String trangThai = request.getParameter("trangThai");
+        Integer id_sp = Integer.parseInt(request.getParameter("sp"));
+        Integer id_ms = Integer.parseInt(request.getParameter("ms"));
+        Integer id_sz = Integer.parseInt(request.getParameter("sz"));
+        SanPham sp = new SanPham();
+        MauSac ms = new MauSac();
+        Size sz = new Size();
+        ChitietSp ct = new ChitietSp();
+        sp.setId(id_sp);
+        ct.setSp(sp);
+        ms.setId(id_ms);
+        ct.setMs(ms);
+        sz.setId(id_sz);
+        ct.setSz(sz);
+        ct.setGiaBan(gia);
+        ct.setSoLg(slg);
+        ct.setTrangThai(trangThai);
+        ct.setNgaySua(new Date());
+        ct.setNgayTao(new Date());
 
+        res.add(ct);
+        response.sendRedirect("/ctsp/index");
     }
 
     private void store(HttpServletRequest request, HttpServletResponse response) throws IOException {
