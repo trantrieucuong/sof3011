@@ -46,7 +46,7 @@ public class DanhMucServlet extends HttpServlet {
         Integer id = Integer.parseInt(request.getParameter("id"));
         DanhMuc dm = repos.getdetail(id);
         request.setAttribute("dm",dm);
-        request.getRequestDispatcher("/view/danh_muc/create.jsp").forward(request,response);
+        request.getRequestDispatcher("/view/danh_muc/edit.jsp").forward(request,response);
     }
 
     private void create(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -71,7 +71,7 @@ public class DanhMucServlet extends HttpServlet {
     }
 
     private void update(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String id = request.getParameter("id");
+        String id = request.getParameter("ma");
         String ten = request.getParameter("ten");
         String trangThai = request.getParameter("trangThai");
         DanhMuc dm = new DanhMuc();
@@ -81,12 +81,12 @@ public class DanhMucServlet extends HttpServlet {
         dm.setNgaySua(new Date());
         dm.setNgayTao(new Date());
 
-        repos.update(dm);
+        repos.add(dm);
         response.sendRedirect("/danhmuc/index");
     }
 
     private void store(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String id = request.getParameter("id");
+        String id = request.getParameter("ma");
         String ten = request.getParameter("ten");
         String trangThai = request.getParameter("trangThai");
         DanhMuc dm = new DanhMuc();

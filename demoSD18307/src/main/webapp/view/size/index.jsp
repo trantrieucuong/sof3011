@@ -14,6 +14,7 @@
     <title>Title</title>
 </head>
 <body>
+<a class="btn btn-primary" href="/size/create">Thêm size</a>
 <h2>Danh sách size</h2>
 <table class="table" border="1">
     <thead>
@@ -37,10 +38,10 @@
             <td>${s.ngayTao}</td>
             <td>${s.ngaySua}</td>
             <td>
-                <a class="btn btn-primary" href="#">Cập nhật</a>
+                <a class="btn btn-primary" href="/size/edit?id=${s.id}">Cập nhật</a>
             </td>
             <td>
-                <a class="btn btn-danger" href="#">Xóa</a>
+                <a class="btn btn-danger" href="/size/delete?id=${s.id}">Xóa</a>
             </td>
         </tr>
     </c:forEach>

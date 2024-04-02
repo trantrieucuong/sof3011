@@ -71,6 +71,7 @@ public class DanhMucRepos {
                 sess.close();
             }
         }
+
     }
     public static void main(String[] args) {
         ArrayList<DanhMuc> list = new DanhMucRepos().getlist();

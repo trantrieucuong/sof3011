@@ -17,7 +17,7 @@
 <form class="row g-3" action="/danhmuc/store" method="post">
     <div class="col-md-6">
         <label for="id" class="form-label">Mã danh mục</label>
-        <input type="text" class="form-control" id="id" name="id">
+        <input type="text" class="form-control" id="id" name="ma">
     </div>
     <div class="col-md-6">
         <label for="name" class="form-label">Tên danh muc</label>

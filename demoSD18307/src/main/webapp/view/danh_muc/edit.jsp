@@ -16,11 +16,11 @@
 <form class="row g-3" action="/danhmuc/update?id=${dm.id}" method="post">
     <div class="col-md-6">
         <label for="id" class="form-label">Mã danh mục</label>
-        <input type="text" class="form-control" id="id" name="id">
+        <input type="text" class="form-control" id="id" name="ma" value="${dm.maDanhMuc}">
     </div>
     <div class="col-md-6">
         <label for="name" class="form-label">Tên danh muc</label>
-        <input type="text" class="form-control" id="name" name="ten">
+        <input type="text" class="form-control" id="name" name="ten" value="${dm.tenDanhMuc}">
     </div>
     <div class="col-md-6">
         <label for="sex" class="form-label">TRạng thái</label>
@@ -38,7 +38,7 @@
         </div>
     </div>
     <div class="col-12">
-        <button type="submit" class="btn btn-primary">Sign in</button>
+        <button type="submit" class="btn btn-primary">update</button>
     </div>
 </form>
 </body>

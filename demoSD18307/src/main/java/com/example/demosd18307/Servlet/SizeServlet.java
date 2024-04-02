@@ -92,7 +92,7 @@ public class SizeServlet extends HttpServlet {
     }
 
     private void store(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String ma = request.getParameter("id");
+        String ma = request.getParameter("ma");
         String ten = request.getParameter("ten");
         String trangThai = request.getParameter("trangThai");
         Size sz = new Size();

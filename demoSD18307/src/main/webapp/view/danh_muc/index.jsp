@@ -38,10 +38,10 @@
             <td>${dm.ngayTao}</td>
             <td>${dm.ngaySua}</td>
             <td>
-                <a class="btn btn-primary" href="#">Cập nhật</a>
+                <a class="btn btn-primary" href="/danhmuc/edit?id=${dm.id}">Cập nhật</a>
             </td>
             <td>
-                <a class="btn btn-danger" href="#">Xóa</a>
+                <a class="btn btn-danger" href="/danhmuc/delete?id=${dm.id}">Xóa</a>
             </td>
         </tr>
     </c:forEach>

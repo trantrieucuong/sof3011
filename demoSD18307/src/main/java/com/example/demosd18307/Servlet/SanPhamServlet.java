@@ -82,12 +82,12 @@ public class SanPhamServlet extends HttpServlet {
     }
 
     private void store(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String id = request.getParameter("id");
+        String ma = request.getParameter("ma");
         String ten = request.getParameter("ten");
         String trangThai = request.getParameter("trangThai");
         Integer id_dm = Integer.parseInt(request.getParameter("dm"));
         SanPham sp = new SanPham();
-        sp.setMaSanpham(id);
+        sp.setMaSanpham(ma);
         sp.setTenSanpham(ten);
         sp.setTrangThai(trangThai);
         sp.setNgaySua(new Date());
