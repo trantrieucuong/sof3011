@@ -52,6 +52,9 @@
                         <button type="submit" class="btn btn-primary">Chi tiết</button>
                     </form>
                 </td>
+                <td>
+                    <a class="btn btn-danger" href="/home/deletehd?id=${hd.id}">Xóa</a>
+                </td>
             </tr>
         </c:forEach>
             </tbody>
@@ -106,7 +109,10 @@
                             <input type="number" class="form-control quantityInput" value="${hdcts.soLuongMua}" min="1">
                             <button class="btn btn-success confirmUpdate">Xác nhận</button>
                         </div>
-                        <a class="btn btn-danger" href="/delete?id=${hdcts.id}">Xóa</a>
+
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" href="/home/deletehdct?id=${hdcts.id}">Xóa</a>
                     </td>
                 </tr>
             </c:forEach>
