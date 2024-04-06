@@ -24,6 +24,7 @@
         <th scope="col">kích thước</th>
         <th scope="col">Danh mục</th>
         <th scope="col">Trang Thai</th>
+        <th scope="col">Đơn giá</th>
         <th scope="col">Ngay tao</th>
         <th scope="col">Ngay Sua</th>
         <th colspan="2">Thao tác</th>
@@ -38,11 +39,13 @@
             <td>${ct.sz.tenSize}</td>
             <td>${ct.sp.dm.tenDanhMuc}</td>
             <td>${ct.trangThai}</td>
+            <td>${ct.giaBan}</td>
+
             <td>${ct.ngayTao}</td>
             <td>${ct.ngaySua}</td>
-            <td>
-                <a class="btn btn-primary" href="/ctsp/edit?id=${ct.id}">Cập nhật</a>
-            </td>
+    <td>
+        <a class="btn btn-primary" href="/ctsp/edit?id=${ct.id}">Cập nhật</a>
+    </td>
             <td>
                 <a class="btn btn-danger" href="/ctsp/delete?id=${ct.id}">Xóa</a>
             </td>

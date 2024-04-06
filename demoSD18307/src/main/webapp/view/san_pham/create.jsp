@@ -17,31 +17,31 @@
 <form class="row g-3" action="/sanpham/store" method="post">
     <div class="col-md-6">
         <label for="id" class="form-label">Mã sản phẩm</label>
-        <input type="text" class="form-control" id="id" name="ma">
+        <input type="text" class="form-control" id="id" name="ma" required>
     </div>
     <div class="col-md-6">
         <label for="name" class="form-label">Tên sản phẩm</label>
-        <input type="text" class="form-control" id="name" name="ten">
+        <input type="text" class="form-control" id="name" name="ten" required>
     </div>
     <div class="col-md-6">
         <label for="sex" class="form-label">TRạng thái</label>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="trangThai" id="sta" value="Active">
+            <input class="form-check-input" type="radio" name="trangThai" id="sta" value="Active" required>
             <label class="form-check-label" for="sta">
                 Active
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="trangThai" id="sex" value="Inactive">
+            <input class="form-check-input" type="radio" name="trangThai" id="sex" value="Inactive" required>
             <label class="form-check-label" for="sex">
                 Inactive
             </label>
         </div>
         <div class="col-md-6">
             <label for="inputState" class="form-label">Danh mục</label>
-            <select id="inputState" class="form-select" name="dm">
+            <select id="inputState" class="form-select" name="dm" required>
                 <c:forEach items="${dm}" var="dm">
-                    <option value="${dm.id}">${dm.tenDanhMuc}</option>
+                    <option value="${dm.id}" required>${dm.tenDanhMuc}</option>
                 </c:forEach>
             </select>
         </div>

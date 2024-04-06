@@ -14,13 +14,26 @@
     <title>Title</title>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/ban-hang">update</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+
+            </div>
+        </div>
+    </div>
+</nav>
 <form class="row g-3" action="/ctsp/update?id=${data.id}" method="post">
     <div class="col-md-6">
         <label for="name" class="form-label">sản phẩm</label>
-        <select name="sp" id="name" class="form-select">
+        <select name="sp" id="name" class="form-select" >
             <c:forEach items="${sp}" var="sp">
                 <option value="${sp.id}"
-                <c:if test="${data.tenSanpham == sp.tenSanpham}"> selected </c:if>
+                        <c:if test="${data.sp.tenSanpham == sp.tenSanpham}"> selected </c:if>
                 >${sp.tenSanpham}</option>
             </c:forEach>
         </select>
@@ -29,43 +42,50 @@
         <label for="size" class="form-label">Kich thuoc</label>
         <select name="sz" id="size" class="form-select">
             <c:forEach items="${sz}" var="sz">
-                <option value="${sz.id}">${sz.tenSize}</option>
+                <option value="${sz.id}"
+                        <c:if test="${data.sz.tenSize == sz.tenSize}"> selected </c:if>
+                >${sz.tenSize}</option>
             </c:forEach>
         </select>
     </div>
     <div class="col-md-6">
         <label for="mausac" class="form-label">Mau Sac</label>
-        <select name="ms" id="mausac" class="form-select">
+        <select name="ms" id="mausac" class="form-select" >
             <c:forEach items="${ms}" var="ms">
-                <option value="${ms.id}">${ms.tenMau}</option>
+                <option value="${ms.id}"
+                        <c:if test="${data.ms.tenMau == ms.tenMau}"> selected </c:if>
+                >${ms.tenMau}</option>
             </c:forEach>
         </select>
     </div>
     <div class="col-md-6">
         <label for="price" class="form-label">Đơn giá</label>
-        <input type="text" class="form-control" id="price" name="gia">
+        <input type="text" class="form-control" id="price" name="gia" value="${data.giaBan}">
     </div>
     <div class="col-md-6">
         <label for="slg" class="form-label">Số Lượng</label>
-        <input type="text" class="form-control" id="slg" name="slg">
+        <input type="text" class="form-control" id="slg" name="slg" value="${data.soLg}">
     </div>
     <div class="col-md-6">
         <label for="sex" class="form-label">TRạng thái</label>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="trangThai" id="sta" value="Active">
+            <input class="form-check-input" type="radio" name="trangThai" id="sta" value="còn hàng"
+                   <c:if test="${data.trangThai == 'Active'}">checked</c:if>
+            >
             <label class="form-check-label" for="sta">
                 Active
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="trangThai" id="sex" value="Inactive">
+            <input class="form-check-input" type="radio" name="trangThai" id="sex" value="hết hàng"
+                   <c:if test="${data.trangThai == 'Inactive'}">checked</c:if>>
             <label class="form-check-label" for="sex">
                 Inactive
             </label>
         </div>
     </div>
     <div class="col-12">
-        <button type="submit" class="btn btn-primary">Them SP</button>
+        <button type="submit" class="btn btn-primary">Sửa CT SP</button>
     </div>
 </form>
 </body>

@@ -27,7 +27,7 @@
                 <td>ID</td>
                 <td>Ten khach hang</td>
                 <td>Ngay tao</td>
-                <td>Tong tien</td>
+
                 <td>Trang Thai</td>
                 <td>Chuc nang</td>
             </tr>
@@ -40,7 +40,7 @@
                 <td>${hd.khachHang.hoTen}</td>
                 <td>${hd.ngayTao}</td>
 
-                <td></td>
+
                 <td>${hd.trangThai}</td>
                 <td>
                     <form action="/home/thanhtoan" method="post">
