@@ -27,7 +27,7 @@
                 <td>ID</td>
                 <td>Ten khach hang</td>
                 <td>Ngay tao</td>
-                <td>Tong tien</td>
+
                 <td>Trang Thai</td>
                 <td>Chuc nang</td>
             </tr>
@@ -40,7 +40,7 @@
                 <td>${hd.khachHang.hoTen}</td>
                 <td>${hd.ngayTao}</td>
 
-                <td></td>
+
                 <td>${hd.trangThai}</td>
                 <td>
                     <form action="/home/thanhtoan" method="post">
@@ -51,6 +51,9 @@
                         <input type="hidden" name="idHoaDon" value="${hd.id}">
                         <button type="submit" class="btn btn-primary">Chi tiết</button>
                     </form>
+                </td>
+                <td>
+                    <a class="btn btn-danger" href="/home/deletehd?id=${hd.id}">Xóa</a>
                 </td>
             </tr>
         </c:forEach>
@@ -106,7 +109,10 @@
                             <input type="number" class="form-control quantityInput" value="${hdcts.soLuongMua}" min="1">
                             <button class="btn btn-success confirmUpdate">Xác nhận</button>
                         </div>
-                        <a class="btn btn-danger" href="/delete?id=${hdcts.id}">Xóa</a>
+
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" href="/home/deletehdct?id=${hdcts.id}">Xóa</a>
                     </td>
                 </tr>
             </c:forEach>

@@ -94,6 +94,7 @@ public class CtspServlet extends HttpServlet {
     }
 
     private void update(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Integer id=Integer.valueOf(request.getParameter("id"));
         String ma = request.getParameter("ma");
         Float gia = Float.parseFloat(request.getParameter("gia"));
         Integer slg = Integer.parseInt(request.getParameter("slg"));
@@ -117,7 +118,7 @@ public class CtspServlet extends HttpServlet {
         ct.setNgaySua(new Date());
         ct.setNgayTao(new Date());
 
-        res.add(ct);
+        res.addctsp(ct);
         response.sendRedirect("/ctsp/index");
     }
 

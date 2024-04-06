@@ -19,5 +19,6 @@
 <a class="btn btn-primary" href="/sanpham/index">Sản Phẩm</a>
 <a class="btn btn-primary" href="/size/index">Size</a>
 <a class="btn btn-primary" href="/khachhang/index">Khách Hàng</a>
+<a class="btn btn-primary" href="/ctsp/index">chi tiết sản phẩm</a>
 </body>
 </html>

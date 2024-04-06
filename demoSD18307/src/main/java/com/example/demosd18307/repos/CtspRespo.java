@@ -1,6 +1,7 @@
 package com.example.demosd18307.repos;
 
 import com.example.demosd18307.moudel.ChitietSp;
+import com.example.demosd18307.moudel.DanhMuc;
 import com.example.demosd18307.moudel.SanPham;
 import com.example.demosd18307.utils.HibernateUtils;
 import org.hibernate.Session;
@@ -52,26 +53,17 @@ public class CtspRespo {
         }
         sess.close();
     }
-    public void update(ChitietSp ctsp){
-        Session sess = null;
-        Transaction tr = null;
+    public void addctsp(ChitietSp ctsp){
+        sess = HibernateUtils.getFACTORY().openSession();
+        Transaction tr = sess.beginTransaction();
         try {
-            sess = HibernateUtils.getFACTORY().openSession();
-            tr = sess.beginTransaction();
-
-            sess.saveOrUpdate(ctsp); // Sử dụng saveOrUpdate để thêm mới hoặc cập nhật đối tượng
-
+            sess.saveOrUpdate(ctsp);
             tr.commit();
-        } catch (Exception e){
-            if (tr != null) {
-                tr.rollback();
-            }
+        }catch (Exception e){
             e.printStackTrace();
-        } finally {
-            if (sess != null && sess.isOpen()) {
-                sess.close();
-            }
+            tr.rollback();
         }
+        sess.close();
     }
 //    public List<ChitietSp> findById(int idSp){
 //        ArrayList<ChitietSp> rs = new ArrayList<>();

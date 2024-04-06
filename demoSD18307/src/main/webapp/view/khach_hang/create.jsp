@@ -17,27 +17,27 @@
 <form class="row g-3" action="/khachhang/store" method="post">
     <div class="col-md-6">
     <label for="name" class="form-label">Tên Khách hàng</label>
-    <input type="text" class="form-control" id="name" name="ten">
+    <input type="text" class="form-control" id="name" name="ten" required>
     </div>
     <div class="col-md-6">
         <label for="id" class="form-label">Địa chỉ</label>
-        <input type="text" class="form-control" id="id" name="diaChi">
+        <input type="text" class="form-control" id="id" name="diaChi" required>
     </div>
 
     <div class="col-md-6">
         <label for="name" class="form-label">SDT</label>
-        <input type="text" class="form-control" id="sdt" name="sdt">
+        <input type="text" class="form-control" id="sdt" name="sdt" required>
     </div>
     <div class="col-md-6">
         <label for="sex" class="form-label">TRạng thái</label>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="trangThai" id="sta" value="Active">
+            <input class="form-check-input" type="radio" name="trangThai" id="sta" value="Active" required>
             <label class="form-check-label" for="sta">
                 Active
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="trangThai" id="sex" value="Inactive">
+            <input class="form-check-input" type="radio" name="trangThai" id="sex" value="Inactive" required>
             <label class="form-check-label" for="sex">
                 Inactive
             </label>

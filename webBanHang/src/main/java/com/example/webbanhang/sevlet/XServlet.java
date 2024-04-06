@@ -24,7 +24,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "XServlet", value = {"/home","/home/createInvoice","/home/searchCustomer","/home/thanhtoan","/home/hoadonct","/home/delete","/home/update","/home/updateQuantity","/home/addToCart","/home/add/index"})
+@WebServlet(name = "XServlet", value = {"/home","/home/createInvoice","/home/searchCustomer","/home/thanhtoan","/home/hoadonct","/home/delete","/home/update","/home/updateQuantity","/home/addToCart","/home/add/index","/home/deletehd","/home/deletehdct"})
 public class XServlet extends HttpServlet {
     private CtspRespo res = new CtspRespo();
     private SizeRespon szres=new SizeRespon();
@@ -45,6 +45,20 @@ public class XServlet extends HttpServlet {
         HoaDonCT hoaDonCT=hdctRepos.getDetail(id);
         hdctRepos.delete(hoaDonCT);
         response.sendRedirect("/home");
+    }else if(uri.equals("/home/deletehd")){
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        HoaDon hd = hdrepo.getdetail(id);
+        hdrepo.delete(hd);
+
+        response.sendRedirect("/home");
+
+    }else if(uri.equals("/home/deletehdct")){
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        HoaDonCT hdct = hdctRepos.getDetail(id);
+        hdctRepos.delete(hdct);
+
+        response.sendRedirect("/home");
+
     }
     }
 

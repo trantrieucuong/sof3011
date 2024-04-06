@@ -17,13 +17,13 @@
 <form class="row g-3" action="/ctsp/store" method="post">
     <div class="col-md-6">
         <label for="id" class="form-label">Mã sản phẩm</label>
-        <input type="text" class="form-control" id="id" name="ma">
+        <input type="text" class="form-control" id="id" name="ma" required>
     </div>
     <div class="col-md-6">
         <label for="name" class="form-label">sản phẩm</label>
-        <select name="sp" id="name" class="form-select">
+        <select name="sp" id="name" class="form-select" >
             <c:forEach items="${sp}" var="sp">
-                <option value="${sp.id}">${sp.tenSanpham}</option>
+                <option value="${sp.id}" required>${sp.tenSanpham}</option>
             </c:forEach>
         </select>
     </div>
@@ -31,7 +31,7 @@
         <label for="size" class="form-label">Kich thuoc</label>
         <select name="sz" id="size" class="form-select">
             <c:forEach items="${sz}" var="sz">
-                <option value="${sz.id}">${sz.tenSize}</option>
+                <option value="${sz.id}" required>${sz.tenSize}</option>
             </c:forEach>
         </select>
     </div>
@@ -39,28 +39,28 @@
         <label for="mausac" class="form-label">Mau Sac</label>
         <select name="ms" id="mausac" class="form-select">
             <c:forEach items="${ms}" var="ms">
-                <option value="${ms.id}">${ms.tenMau}</option>
+                <option value="${ms.id}" required>${ms.tenMau}</option>
             </c:forEach>
         </select>
     </div>
     <div class="col-md-6">
         <label for="price" class="form-label">Đơn giá</label>
-        <input type="text" class="form-control" id="price" name="gia">
+        <input type="text" class="form-control" id="price" name="gia" required>
     </div>
     <div class="col-md-6">
         <label for="slg" class="form-label">Số Lượng</label>
-        <input type="text" class="form-control" id="slg" name="slg">
+        <input type="text" class="form-control" id="slg" name="slg" required>
     </div>
     <div class="col-md-6">
-        <label for="sex" class="form-label">TRạng thái</label>
+        <label for="sex" class="form-label" required>TRạng thái</label >
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="trangThai" id="sta" value="Active">
+            <input class="form-check-input" type="radio" name="trangThai" id="sta" value="Active" required>
             <label class="form-check-label" for="sta">
                 Active
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="trangThai" id="sex" value="Inactive">
+            <input class="form-check-input" type="radio" name="trangThai" id="sex" value="Inactive" required>
             <label class="form-check-label" for="sex">
                 Inactive
             </label>
